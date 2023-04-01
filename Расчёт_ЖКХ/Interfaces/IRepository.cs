@@ -11,7 +11,7 @@ namespace Расчёт_ЖКХ.Interfaces
     interface IRepository
     {
         List<CalculationModel> GetAllData(SqliteConnection con);
-        void AddData(double X, double GTN, double GTE, double E, double HM, double GTNM, double GTEM, double EENM, double EEDM, SqliteConnection con);
+        void AddData(double X, double GTN, double GTE, double E, double HM, double GTNM, double GTEM, double EENM, double EEDM, DateOnly date, SqliteConnection con);
         void CreateTable(SqliteConnection con);
     }
 }

@@ -18,10 +18,11 @@ namespace Расчёт_ЖКХ.Model
         public double GTEM { get; set; }
         public double EENM { get; set; }
         public double EEDM { get; set; }
+        public DateOnly date { get; set; }
 
         public override string ToString()
         {
-            return string.Format("ХВС: {0:#.##}\nГВСТН: {1:#.##}\nГВСТЕ: {1:#.##}\nЭЭ: {2:#.##}", HVS, GVSTN, GVSTE, EE);
+            return string.Format("ХВС: {0:#.##}\nГВСТН: {1:#.##}\nГВСТЕ: {1:#.##}\nЭЭ: {2:#.##}\nДата: {3}", HVS, GVSTN, GVSTE, EE, date);
         }
     }
 }

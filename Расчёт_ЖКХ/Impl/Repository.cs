@@ -11,16 +11,16 @@ namespace Расчёт_ЖКХ.Impl
 {
     internal class Repository : IRepository
     {
-        public void AddData(double X, double GTN, double GTE, double E, double HM, double GTNM, double GTEM, double EENM, double EEDM, SqliteConnection con)
+        public void AddData(double X, double GTN, double GTE, double E, double HM, double GTNM, double GTEM, double EENM, double EEDM, DateOnly date, SqliteConnection con)
         {
-            String sqlExpression = string.Format("INSERT INTO Calculation (HVS, GVSTN, GVSTE, EE, HM, GTNM, GTEM, EENM, EEDM) VALUES ('{0:#.##}', '{1:#.##}', '{2:#.##}', '{3:#.##}', '{4:#.##}', '{5:#.##}', '{6:#.##}', '{7:#.##}', '{8:#.##}')", X, GTN, GTE, E, HM, GTNM, GTEM, EENM, EEDM);
+            String sqlExpression = string.Format("INSERT INTO Calculation (HVS, GVSTN, GVSTE, EE, HM, GTNM, GTEM, EENM, EEDM) VALUES ('{0:#.##}', '{1:#.##}', '{2:#.##}', '{3:#.##}', '{4:#.##}', '{5:#.##}', '{6:#.##}', '{7:#.##}', '{8:#.##}', {9})", X, GTN, GTE, E, HM, GTNM, GTEM, EENM, EEDM, date.ToString());
             var command = new SqliteCommand(sqlExpression, con);
             command.ExecuteNonQuery();
         }
 
         public void CreateTable(SqliteConnection con)
         {
-            String sqlExpression = "create table if not exists Calculation(_id integer primary key autoincrement not null, HVS text, GVSTN text, GVSTE text, EE text, HM text, GTNM text, GTEM text, EENM text, EEDM text)";
+            String sqlExpression = "create table if not exists Calculation(_id integer primary key autoincrement not null, HVS text, GVSTN text, GVSTE text, EE text, HM text, GTNM text, GTEM text, EENM text, EEDM text, DATE text)";
             var command = new SqliteCommand(sqlExpression, con);
             command.ExecuteNonQuery();
         }
@@ -67,6 +67,12 @@ namespace Расчёт_ЖКХ.Impl
                             eD = 0.0;
                         }
 
+                        DateOnly date = new DateOnly();
+                        if (!DateOnly.TryParse(reader.GetString(10), out date))
+                        {
+                            throw new Exception("Жэесть.....");
+                        }
+
                         CalculationModel model = new CalculationModel() {
                             _id = reader.GetInt32(0),
                             HVS = Double.Parse(reader.GetString(1)),
@@ -78,6 +84,7 @@ namespace Расчёт_ЖКХ.Impl
                             GTEM = gte,
                             EENM = eN,
                             EEDM = eD,
+                            date = date,
                         };
 
                         list.Add(model);

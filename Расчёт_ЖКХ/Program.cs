@@ -38,6 +38,17 @@ namespace Расчёт_ЖКХ
         {
             ICalculation calculation = new CalcImpl();
 
+            DateOnly date = DateOnly.FromDateTime(DateTime.Now);
+
+            List<CalculationModel> data = repository.GetAllData(con);
+
+            int N = 1;
+
+            foreach (CalculationModel model in data)
+            {
+                if (date.Year == model.date.Year && date.Month == model.date.Month) { N++; } 
+            }
+
             double HM = 0.0;
             double HR = 0.0;
 
@@ -74,7 +85,6 @@ namespace Расчёт_ЖКХ
 
                 double Mprev = 0;
 
-                List<CalculationModel> data = repository.GetAllData(con);
                 if (data.Count > 1)
                 {
                     Mprev = data[data.Count - 1].HM;
@@ -82,16 +92,29 @@ namespace Расчёт_ЖКХ
 
                 V = calculation.counterV(Mprev, HM);
 
+                HR = calculation.carge(V, HT);
+
             } else if (ans == "n")
             {
                 V = calculation.normV(HN, n);
+                HR = calculation.carge(V, HT);
+
+                for (int i = 1; i< N; i++)
+                {
+                    Console.WriteLine("Кол-во человек проживающих в помещении: ");
+                    if (!int.TryParse(Console.ReadLine(), out n))
+                    {
+                        throw new Exception("Ошибка ввода");
+                    }
+
+                    V = calculation.normV(HN, n);
+                    HR += calculation.carge(V, HT);
+                }
             }
             else
             {
                 throw new Exception("Ошибка ввода");
             }
-
-            HR = calculation.carge(V, HT);
 
             Console.WriteLine("Имеется прибор учета по услуге ГВС ТН? (y/n): ");
             if ((ans = Console.ReadLine()) == "y")
@@ -104,7 +127,6 @@ namespace Расчёт_ЖКХ
 
                 double Mprev = 0;
 
-                List<CalculationModel> data = repository.GetAllData(con);
                 if (data.Count > 1)
                 {
                     Mprev = data[data.Count - 1].GTNM;
@@ -112,17 +134,30 @@ namespace Расчёт_ЖКХ
 
                 VGTN = calculation.counterV(Mprev, GTNM);
 
+                GTNR = calculation.carge(VGTN, GTT);
+
             }
             else if (ans == "n")
             {
                 VGTN = calculation.normV(GTN, n);
+                GTNR += calculation.carge(VGTN, GTT);
+
+                for (int i = 1; i < N; i++)
+                {
+                    Console.WriteLine("Кол-во человек проживающих в помещении: ");
+                    if (!int.TryParse(Console.ReadLine(), out n))
+                    {
+                        throw new Exception("Ошибка ввода");
+                    }
+
+                    VGTN = calculation.normV(GTN, n);
+                    GTNR += calculation.carge(VGTN, GTT);
+                }
             }
             else
             {
                 throw new Exception("Ошибка ввода");
             }
-
-            GTNR = calculation.carge(VGTN, GTT);
 
             Console.WriteLine("Имеется прибор учета по услуге ГВС ТЕ? (y/n): ");
             if ((ans = Console.ReadLine()) == "y")
@@ -135,24 +170,25 @@ namespace Расчёт_ЖКХ
 
                 double Mprev = 0;
 
-                List<CalculationModel> data = repository.GetAllData(con);
                 if (data.Count > 1)
                 {
                     Mprev = data[data.Count - 1].GTEM;
                 }
 
                 V = calculation.counterV(Mprev, GTENM);
+                GTER = calculation.carge(V, GET);
             }
             else if (ans == "n")
             {
                 V = calculation.termEnV(VGTN, GEN);
+                GTER = calculation.carge(V, GET);
             }
             else
             {
                 throw new Exception("Ошибка ввода");
             }
 
-            GTER = calculation.carge(V, GET);
+           
 
             Console.WriteLine("Имеется прибор учета по услуге ЭЭ? (y/n): ");
             if ((ans = Console.ReadLine()) == "y")
@@ -171,7 +207,6 @@ namespace Расчёт_ЖКХ
                 double mPrevD = 0;
                 double mPrevN = 0;
 
-                List<CalculationModel> data = repository.GetAllData(con);
                 if (data.Count > 1)
                 {
                     mPrevD = data[data.Count - 1].EEDM;
@@ -191,6 +226,18 @@ namespace Расчёт_ЖКХ
                 V = calculation.normV(EN, n);
 
                 ER = calculation.carge(V, ET);
+
+                for (int i = 1; i < N; i++)
+                {
+                    Console.WriteLine("Кол-во человек проживающих в помещении: ");
+                    if (!int.TryParse(Console.ReadLine(), out n))
+                    {
+                        throw new Exception("Ошибка ввода");
+                    }
+
+                    V = calculation.normV(EN, n);
+                    ER += calculation.carge(V, GET);
+                }
             }
             else
             {
@@ -198,7 +245,7 @@ namespace Расчёт_ЖКХ
             }
 
             Console.WriteLine(string.Format("Результаты расчёта за текущий пирод: \nХВС: {0:#.##}\nГВС ТН: {1:#.##}\nГВС ТЕ: {2:#.##}\nЕЕ: {3:#.##}", HR, GTNR, GTER, ER));
-            repository.AddData(HR, GTNR, GTER, ER, HM, GTNM, GTENM, ENM, EDM, con);
+            repository.AddData(HR, GTNR, GTER, ER, HM, GTNM, GTENM, ENM, EDM, , con);
         }
 
         private static void Summ(SqliteConnection con, IRepository repository)
