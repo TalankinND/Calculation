@@ -245,7 +245,7 @@ namespace Расчёт_ЖКХ
             }
 
             Console.WriteLine(string.Format("Результаты расчёта за текущий пирод: \nХВС: {0:#.##}\nГВС ТН: {1:#.##}\nГВС ТЕ: {2:#.##}\nЕЕ: {3:#.##}", HR, GTNR, GTER, ER));
-            repository.AddData(HR, GTNR, GTER, ER, HM, GTNM, GTENM, ENM, EDM, , con);
+            repository.AddData(HR, GTNR, GTER, ER, HM, GTNM, GTENM, ENM, EDM, date, con);
         }
 
         private static void Summ(SqliteConnection con, IRepository repository)
