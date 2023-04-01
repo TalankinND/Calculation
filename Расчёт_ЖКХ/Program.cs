@@ -76,9 +76,13 @@ namespace Расчёт_ЖКХ
 
                 V = calculation.counterV(Mprev, HM);
 
-            } else
+            } else if (ans == "n")
             {
                 V = calculation.normV(HN, n);
+            }
+            else
+            {
+                throw new Exception("Ошибка ввода");
             }
 
             HR = calculation.carge(V, HT);
@@ -100,9 +104,13 @@ namespace Расчёт_ЖКХ
                 VGTN = calculation.counterV(Mprev, GTNM);
 
             }
-            else
+            else if (ans == "n")
             {
                 VGTN = calculation.normV(GTN, n);
+            }
+            else
+            {
+                throw new Exception("Ошибка ввода");
             }
 
             GTNR = calculation.carge(VGTN, GTT);
@@ -123,9 +131,13 @@ namespace Расчёт_ЖКХ
 
                 V = calculation.counterV(Mprev, GTENM);
             }
-            else
+            else if (ans == "n")
             {
                 V = calculation.termEnV(VGTN, GEN);
+            }
+            else
+            {
+                throw new Exception("Ошибка ввода");
             }
 
             GTER = calculation.carge(V, GET);
@@ -156,11 +168,15 @@ namespace Расчёт_ЖКХ
 
                 ER += calculation.carge(V, ETN);
             }
-            else
+            else if (ans == "n")
             {
                 V = calculation.normV(EN, n);
 
                 ER = calculation.carge(V, ET);
+            }
+            else
+            {
+                throw new Exception("Ошибка ввода");
             }
 
             Console.WriteLine(string.Format("Результаты расчёта за текущий пирод: \nХВС: {0:#.##}\nГВС ТН: {1:#.##}\nГВС ТЕ: {2:#.##}\nЕЕ: {3:#.##}", HR, GTNR, GTER, ER));
@@ -171,25 +187,22 @@ namespace Расчёт_ЖКХ
         {
             List<CalculationModel> data = repository.GetAllData(con);
 
-            if (data != null)
+            double sumHVS = 0;
+            double sumGVTNS = 0;
+            double sumGVTES = 0;
+            double sumEE = 0;
+            double sum = 0;
+
+            foreach (CalculationModel model in data)
             {
-                double sumHVS = 0;
-                double sumGVTNS = 0;
-                double sumGVTES = 0;
-                double sumEE = 0;
-                double sum = 0;
-
-                foreach (CalculationModel model in data)
-                {
-                    sumHVS += model.HVS;
-                    sumGVTNS += model.GVSTN;
-                    sumGVTES += model.GTEM;
-                    sumEE += model.EE;
-                    sum += sumHVS + sumGVTES + sumGVTNS + sumEE;
-                }
-
-                Console.WriteLine(string.Format("Общая ХВС: {0:#.##}\nОбщая ГВС ТН: {1:#.##}\nОбщая ГВС ТЕ: {2:#.##}\nОбщая ЭЭ: {3:#.##}\nИтог: {4:#.##}", sumHVS, sumGVTNS, sumGVTES, sumEE, sum));
+                sumHVS += model.HVS;
+                sumGVTNS += model.GVSTN;
+                sumGVTES += model.GTEM;
+                sumEE += model.EE;
+                sum += sumHVS + sumGVTES + sumGVTNS + sumEE;
             }
+
+            Console.WriteLine(string.Format("Общая ХВС: {0:#.##}\nОбщая ГВС ТН: {1:#.##}\nОбщая ГВС ТЕ: {2:#.##}\nОбщая ЭЭ: {3:#.##}\nИтог: {4:#.##}", sumHVS, sumGVTNS, sumGVTES, sumEE, sum));
         }
 
         static void Main(string[] args)
