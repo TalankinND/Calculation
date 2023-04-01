@@ -13,7 +13,7 @@ namespace Расчёт_ЖКХ.Impl
     {
         public void AddData(double X, double GTN, double GTE, double E, double HM, double GTNM, double GTEM, double EENM, double EEDM, DateOnly date, SqliteConnection con)
         {
-            String sqlExpression = string.Format("INSERT INTO Calculation (HVS, GVSTN, GVSTE, EE, HM, GTNM, GTEM, EENM, EEDM) VALUES ('{0:#.##}', '{1:#.##}', '{2:#.##}', '{3:#.##}', '{4:#.##}', '{5:#.##}', '{6:#.##}', '{7:#.##}', '{8:#.##}', {9})", X, GTN, GTE, E, HM, GTNM, GTEM, EENM, EEDM, date.ToString());
+            String sqlExpression = string.Format("INSERT INTO Calculation (HVS, GVSTN, GVSTE, EE, HM, GTNM, GTEM, EENM, EEDM, DATE) VALUES ('{0:#.##}', '{1:#.##}', '{2:#.##}', '{3:#.##}', '{4:#.##}', '{5:#.##}', '{6:#.##}', '{7:#.##}', '{8:#.##}', '{9}')", X, GTN, GTE, E, HM, GTNM, GTEM, EENM, EEDM, date.ToString());
             var command = new SqliteCommand(sqlExpression, con);
             command.ExecuteNonQuery();
         }
