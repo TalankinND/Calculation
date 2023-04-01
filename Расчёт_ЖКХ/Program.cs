@@ -163,7 +163,7 @@ namespace Расчёт_ЖКХ
                 ER = calculation.carge(V, ET);
             }
 
-            Console.WriteLine(string.Format("Результаты расчёта за текущий пирод: \nХВС: {0}\nГВС ТН: {1}\nГВС ТЕ: {2}\nЕЕ: {3}", HR, GTNR, GTER, ER));
+            Console.WriteLine(string.Format("Результаты расчёта за текущий пирод: \nХВС: {0:#.##}\nГВС ТН: {1:#.##}\nГВС ТЕ: {2:#.##}\nЕЕ: {3:#.##}", HR, GTNR, GTER, ER));
             repository.AddData(HR, GTNR, GTER, ER, HM, GTNM, GTENM, ENM, EDM, con);
         }
 
