@@ -58,13 +58,19 @@ namespace Расчёт_ЖКХ
             double V = 0.0;
 
             Console.WriteLine("Кол-во человек проживающих в помещении: ");
-            n = int.Parse(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine() ,out n))
+            {
+                throw new Exception("Ошибка ввода");
+            }
 
             Console.WriteLine("Имеется прибор учета по услуге ХВС? (y/n): ");
             if ((ans = Console.ReadLine()) == "y")
             {
                 Console.WriteLine("Введите показания счётчика: ");
-                HM = Double.Parse(Console.ReadLine());
+                if (!Double.TryParse(Console.ReadLine(), out HM))
+                {
+                    throw new Exception("Ошибка ввода");
+                }
 
                 double Mprev = 0;
 
@@ -91,7 +97,10 @@ namespace Расчёт_ЖКХ
             if ((ans = Console.ReadLine()) == "y")
             {
                 Console.WriteLine("Введите показания счётчика: ");
-                GTNM = Double.Parse(Console.ReadLine());
+                if (!Double.TryParse(Console.ReadLine(), out GTNM))
+                {
+                    throw new Exception("Ошибка ввода");
+                }
 
                 double Mprev = 0;
 
@@ -119,7 +128,10 @@ namespace Расчёт_ЖКХ
             if ((ans = Console.ReadLine()) == "y")
             {
                 Console.WriteLine("Введите показания счётчика: ");
-                GTENM = Double.Parse(Console.ReadLine());
+                if (!Double.TryParse(Console.ReadLine(), out GTENM))
+                {
+                    throw new Exception("Ошибка ввода");
+                }
 
                 double Mprev = 0;
 
@@ -146,9 +158,15 @@ namespace Расчёт_ЖКХ
             if ((ans = Console.ReadLine()) == "y")
             {
                 Console.WriteLine("Введите показания счётчика за день: ");
-                EDM = Double.Parse(Console.ReadLine());
+                if (!Double.TryParse(Console.ReadLine(), out EDM))
+                {
+                    throw new Exception("Ошибка ввода");
+                }
                 Console.WriteLine("Введите показания счётчика за ночь: ");
-                ENM = Double.Parse(Console.ReadLine());
+                if (!Double.TryParse(Console.ReadLine(), out ENM))
+                {
+                    throw new Exception("Ошибка ввода");
+                }
 
                 double mPrevD = 0;
                 double mPrevN = 0;
